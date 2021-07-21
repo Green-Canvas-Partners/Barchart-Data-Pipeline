@@ -5,6 +5,7 @@ import time
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
+import pickle
 
 
 class FuturesDataDownloader:
@@ -24,7 +25,15 @@ class FuturesDataDownloader:
             'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) '
             'Chrome/89.0.4389.114 Safari/537.36')
 
+    @staticmethod
+    def get_auth_credentials():
+        with open('/home/mubbashir/Projects/Barchart-Data-Pipeline/'
+                  'auth_credentials.pkl', 'rb') as auth_file:
+            return pickle.load(auth_file)
+
     def download_data(self, start_date=date(2000, 1, 5), end_date=date(2000, 3, 7), contract_quarterly_key='h'):
+        auth_credentials_dict = FuturesDataDownloader.get_auth_credentials()
+
         with Chrome(executable_path='./chromedriver', options=self.options) as driver:
             start_date_str = start_date.strftime('%Y/%m/%d')
             end_date_str = end_date.strftime('%Y/%m/%d')
@@ -45,7 +54,7 @@ class FuturesDataDownloader:
 
             WebDriverWait(driver, 10).until(lambda d: d.find_element(By.NAME,
                                                                      'email')).send_keys(
-                'amer@greencanvaspartners.com'
+                auth_credentials_dict['email']
             )
             time.sleep(2)
 
@@ -53,7 +62,7 @@ class FuturesDataDownloader:
 
             WebDriverWait(driver, 10).until(lambda d: d.find_element(By.NAME,
                                                                      'password')).send_keys(
-                'saKsde@CbE5E8CP'
+                auth_credentials_dict['password']
             )
             time.sleep(2)
 
@@ -112,4 +121,4 @@ class FuturesDataDownloader:
 
 if __name__ == '__main__':
     fut_data_dnldr = FuturesDataDownloader('ES')
-    fut_data_dnldr.download_data()
+    fut_data_dnldr.get_auth_credentials()
