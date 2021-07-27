@@ -1,6 +1,8 @@
 from os import listdir
 from os.path import isfile, join
 import pandas as pd
+from datetime import datetime, timedelta
+import numpy as np
 
 
 class FuturesDailyDataPreProcessor:
@@ -134,6 +136,122 @@ class FuturesDailyDataPreProcessor:
         self.main_df.to_csv(f"{self.dir_path_for_processed_data}/processed_data.csv", index=False)
 
 
+class FuturesRatioBasedRollover:
+    def __init__(self, path_to_csv: str):
+        self.path_to_csv = path_to_csv
+        self.df = pd.DataFrame()
+
+    def load_df(self):
+        self.df = pd.read_csv(self.path_to_csv)
+        self.df['Time'] = pd.to_datetime(self.df['Time'])
+
+    @staticmethod
+    def get_expiration_date(year, month):
+        for i in range(15, 22):
+            if datetime(year=year,
+                        month=month,
+                        day=i).weekday() == 4:
+                return datetime(year=year,
+                                month=month,
+                                day=i)
+
+    @staticmethod
+    def is_rollover_date(datetime_obj: datetime) -> bool:
+        if datetime_obj.month in [3, 6, 9, 12]:
+            if (FuturesRatioBasedRollover.get_expiration_date(
+                    year=datetime_obj.year,
+                    month=datetime_obj.month
+            ) - timedelta(days=8)) == datetime_obj:
+                return True
+            return False
+
+        return False
+
+    def multiply_ratio_with_previous_contracts(self, df_index: int, ratio: float):
+        for i in range(df_index):
+            self.df.at[i, 'Open'] *= ratio
+            self.df.at[i, 'High'] *= ratio
+            self.df.at[i, 'Low'] *= ratio
+            self.df.at[i, 'Last'] *= ratio
+
+    def adjust_for_continuous_data(self):
+        self.load_df()
+
+        for i in range(self.df.shape[0]):
+            if FuturesRatioBasedRollover.is_rollover_date(
+                self.df['Time'].iloc[i]
+            ):
+                self.multiply_ratio_with_previous_contracts(
+                    i,
+                    (self.df['Open'].iloc[i + 1] / self.df['Last'].iloc[i])
+                )
+
+        self.df.to_csv('/home/mubbashir/Projects/Barchart-Data-Pipeline/temp.csv',
+                       index=False)
+
+
+class InterpolateFuturesDailyData:
+    def __init__(self, path_to_csv: str):
+        self.df_path = path_to_csv
+        self.df = pd.DataFrame()
+
+    @staticmethod
+    def is_data_missing(date_1: datetime, date_2: datetime) -> bool:
+        if (date_2 - date_1) > timedelta(days=1):
+            return True
+        return False
+
+    def load_df(self):
+        self.df = pd.read_csv(self.df_path)
+        self.df['Time'] = pd.to_datetime(self.df['Time'])
+
+    def fill_nans_for_missing_data(self):
+        for i in range(1000000):
+            if i + 1 == self.df.shape[0]:
+                break
+
+            temp_df = self.df.iloc[i]
+
+            if InterpolateFuturesDailyData.is_data_missing(
+                self.df['Time'].iloc[i],
+                self.df['Time'].iloc[i + 1]
+            ):
+                temp_df['Time'] = temp_df['Time'] + timedelta(days=1)
+                temp_df['Open'] = np.nan
+                temp_df['High'] = np.nan
+                temp_df['Low'] = np.nan
+                temp_df['Last'] = np.nan
+
+                self.df = self.df.append(temp_df)
+                self.df = self.df.sort_values(by='Time', ignore_index=True)
+                i = 0
+
+    def interpolate(self):
+        self.load_df()
+        self.fill_nans_for_missing_data()
+        self.df['Open'] = self.df['Open'].interpolate(method='linear')
+        self.df['High'] = self.df['High'].interpolate(method='linear')
+        self.df['Low'] = self.df['Low'].interpolate(method='linear')
+        self.df['Last'] = self.df['Last'].interpolate(method='linear')
+        self.df['Volume'] = self.df['Volume'].interpolate(method='linear')
+
+        self.df.to_csv('/home/mubbashir/Projects/Barchart-Data-Pipeline/temp.csv',
+                       index=False)
+
+
 if __name__ == '__main__':
-    fut_data_preprocessor = FuturesDailyDataPreProcessor()
-    fut_data_preprocessor.prepare_data()
+    # fut_data_preprocessor = FuturesDailyDataPreProcessor()
+    # fut_data_preprocessor.prepare_data()
+    fut_rollover = FuturesRatioBasedRollover(
+        '/home/mubbashir/Projects/Barchart-Data-Pipeline/'
+        'ES_Fut_Daily_1999-12-13_2021-07-21.csv'
+    )
+
+    fut_rollover.adjust_for_continuous_data()
+
+    fut_interpolate = InterpolateFuturesDailyData(
+        '/home/mubbashir/Projects/Barchart-Data-Pipeline/'
+        'ES_Fut_Daily_1999-12-13_2021-07-21.csv'
+    )
+
+    fut_interpolate.interpolate()
