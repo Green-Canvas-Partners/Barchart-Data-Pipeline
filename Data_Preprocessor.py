@@ -240,18 +240,16 @@ class InterpolateFuturesDailyData:
 
 
 if __name__ == '__main__':
-    fut_data_preprocessor = FuturesDailyDataPreProcessor()
-    fut_data_preprocessor.prepare_data()
-    # fut_rollover = FuturesRatioBasedRollover(
-    #     '/home/ubuntu/Barchart-Data-Pipeline/'
-    #     'ES_Fut_Daily_1999-12-13_2021-07-21.csv'
-    # )
+    # fut_data_preprocessor = FuturesDailyDataPreProcessor()
+    # fut_data_preprocessor.prepare_data()
+    fut_rollover = FuturesRatioBasedRollover(
+        '/home/ubuntu/Barchart-Data-Pipeline/YM_Futures_2002-12-16_2021-08-04.csv'
+    )
 
-    # fut_rollover.adjust_for_continuous_data()
+    fut_rollover.adjust_for_continuous_data()
 
     # fut_interpolate = InterpolateFuturesDailyData(
-    #     '/home/ubuntu/Barchart-Data-Pipeline/'
-    #     'ES_Fut_Daily_1999-12-13_2021-07-21.csv'
+    #     '/home/ubuntu/Barchart-Data-Pipeline/YM_Futures_2002-12-16_2021-08-04.csv'
     # )
 
     # fut_interpolate.interpolate()
