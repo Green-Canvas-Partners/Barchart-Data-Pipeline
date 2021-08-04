@@ -7,11 +7,11 @@ import numpy as np
 
 class FuturesDailyDataPreProcessor:
     def __init__(self):
-        self.dir_path_for_h_contracts = '/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_h_data'
-        self.dir_path_for_m_contracts = '/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_m_data'
-        self.dir_path_for_u_contracts = '/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_u_data'
-        self.dir_path_for_z_contracts = '/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_z_data'
-        self.dir_path_for_processed_data = '/home/mubbashir/Projects/Barchart-Data-Pipeline/' \
+        self.dir_path_for_h_contracts = '/home/ubuntu/Barchart-Data-Pipeline/fut_daily_h_data'
+        self.dir_path_for_m_contracts = '/home/ubuntu/Barchart-Data-Pipeline/fut_daily_m_data'
+        self.dir_path_for_u_contracts = '/home/ubuntu/Barchart-Data-Pipeline/fut_daily_u_data'
+        self.dir_path_for_z_contracts = '/home/ubuntu/Barchart-Data-Pipeline/fut_daily_z_data'
+        self.dir_path_for_processed_data = '/home/ubuntu/Barchart-Data-Pipeline/' \
                                            'fut_daily_processed_data'
         self.files_to_process_for_h_contracts = []
         self.files_to_process_for_m_contracts = []
@@ -186,7 +186,7 @@ class FuturesRatioBasedRollover:
                     (self.df['Open'].iloc[i + 1] / self.df['Last'].iloc[i])
                 )
 
-        self.df.to_csv('/home/mubbashir/Projects/Barchart-Data-Pipeline/temp.csv',
+        self.df.to_csv('/home/ubuntu/Barchart-Data-Pipeline/temp.csv',
                        index=False)
 
 
@@ -235,23 +235,23 @@ class InterpolateFuturesDailyData:
         self.df['Last'] = self.df['Last'].interpolate(method='linear')
         self.df['Volume'] = self.df['Volume'].interpolate(method='linear')
 
-        self.df.to_csv('/home/mubbashir/Projects/Barchart-Data-Pipeline/temp.csv',
+        self.df.to_csv('/home/ubuntu/Barchart-Data-Pipeline/temp.csv',
                        index=False)
 
 
 if __name__ == '__main__':
-    # fut_data_preprocessor = FuturesDailyDataPreProcessor()
-    # fut_data_preprocessor.prepare_data()
-    fut_rollover = FuturesRatioBasedRollover(
-        '/home/mubbashir/Projects/Barchart-Data-Pipeline/'
-        'ES_Fut_Daily_1999-12-13_2021-07-21.csv'
-    )
+    fut_data_preprocessor = FuturesDailyDataPreProcessor()
+    fut_data_preprocessor.prepare_data()
+    # fut_rollover = FuturesRatioBasedRollover(
+    #     '/home/ubuntu/Barchart-Data-Pipeline/'
+    #     'ES_Fut_Daily_1999-12-13_2021-07-21.csv'
+    # )
 
-    fut_rollover.adjust_for_continuous_data()
+    # fut_rollover.adjust_for_continuous_data()
 
-    fut_interpolate = InterpolateFuturesDailyData(
-        '/home/mubbashir/Projects/Barchart-Data-Pipeline/'
-        'ES_Fut_Daily_1999-12-13_2021-07-21.csv'
-    )
+    # fut_interpolate = InterpolateFuturesDailyData(
+    #     '/home/ubuntu/Barchart-Data-Pipeline/'
+    #     'ES_Fut_Daily_1999-12-13_2021-07-21.csv'
+    # )
 
-    fut_interpolate.interpolate()
+    # fut_interpolate.interpolate()
