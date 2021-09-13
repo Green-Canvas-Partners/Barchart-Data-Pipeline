@@ -32,7 +32,7 @@ class FuturesDailyDataDownloader:
 
     @staticmethod
     def get_auth_credentials() -> dict:
-        with open('/home/ubuntu/Barchart-Data-Pipeline/'
+        with open('/home/mubbashir/Projects/Barchart-Data-Pipeline/'
                   'auth_credentials.pkl', 'rb') as auth_file:
             return pickle.load(auth_file)
 
@@ -55,25 +55,25 @@ class FuturesDailyDataDownloader:
                                           end_date_str: str,
                                           contract_quarterly_key: str):
         if contract_quarterly_key == 'h':
-            os.system(f"mv /home/ubuntu/Downloads/{self.symbol.lower()}h"
+            os.system(f"mv /home/mubbashir/Downloads/{self.symbol.lower()}h"
                       f"{end_date_str.split('/')[0][2:4]}*.csv "
-                      f"/home/ubuntu/Barchart-Data-Pipeline/fut_daily_h_data/"
+                      f"/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_h_data/"
                       f"{self.symbol}h_{start_date_str}_{end_date_str}.csv")
 
         elif contract_quarterly_key == 'm':
-            os.system(f"mv /home/ubuntu/Downloads/{self.symbol.lower()}m"
+            os.system(f"mv /home/mubbashir/Downloads/{self.symbol.lower()}m"
                       f"{end_date_str.split('/')[0][2:4]}*.csv "
-                      f"/home/ubuntu/Barchart-Data-Pipeline/fut_daily_m_data/"
+                      f"/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_m_data/"
                       f"{self.symbol}m_{start_date_str}_{end_date_str}.csv")
         elif contract_quarterly_key == 'u':
-            os.system(f"mv /home/ubuntu/Downloads/{self.symbol.lower()}u"
+            os.system(f"mv /home/mubbashir/Downloads/{self.symbol.lower()}u"
                       f"{end_date_str.split('/')[0][2:4]}*.csv "
-                      f"/home/ubuntu/Barchart-Data-Pipeline/fut_daily_u_data/"
+                      f"/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_u_data/"
                       f"{self.symbol}u_{start_date_str}_{end_date_str}.csv")
         else:
-            os.system(f"mv /home/ubuntu/Downloads/{self.symbol.lower()}z"
+            os.system(f"mv /home/mubbashir/Downloads/{self.symbol.lower()}z"
                       f"{end_date_str.split('/')[0][2:4]}*.csv "
-                      f"/home/ubuntu/Barchart-Data-Pipeline/fut_daily_z_data/"
+                      f"/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_z_data/"
                       f"{self.symbol}z_{start_date_str}_{end_date_str}.csv")
 
         print('***** File Downloaded and moved to folder *****\n\n')
@@ -212,7 +212,7 @@ class N2FuturesDailyDataDownloader:
 
     @staticmethod
     def get_auth_credentials() -> dict:
-        with open('/home/ubuntu/Barchart-Data-Pipeline/'
+        with open('/home/mubbashir/Projects/Barchart-Data-Pipeline/'
                   'auth_credentials.pkl', 'rb') as auth_file:
             return pickle.load(auth_file)
 
@@ -240,25 +240,25 @@ class N2FuturesDailyDataDownloader:
                                           end_date_str: str,
                                           contract_quarterly_key: str):
         if contract_quarterly_key == 'h':
-            os.system(f"mv /home/ubuntu/Downloads/{self.symbol.lower()}h"
+            os.system(f"mv /home/mubbashir/Downloads/{self.symbol.lower()}h"
                       f"{end_date_str.split('/')[0][2:4]}*.csv "
-                      f"/home/ubuntu/Barchart-Data-Pipeline/fut_daily_h_data/"
+                      f"/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_h_data/"
                       f"{self.symbol}h_{start_date_str}_{end_date_str}.csv")
 
         elif contract_quarterly_key == 'm':
-            os.system(f"mv /home/ubuntu/Downloads/{self.symbol.lower()}m"
+            os.system(f"mv /home/mubbashir/Downloads/{self.symbol.lower()}m"
                       f"{end_date_str.split('/')[0][2:4]}*.csv "
-                      f"/home/ubuntu/Barchart-Data-Pipeline/fut_daily_m_data/"
+                      f"/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_m_data/"
                       f"{self.symbol}m_{start_date_str}_{end_date_str}.csv")
         elif contract_quarterly_key == 'u':
-            os.system(f"mv /home/ubuntu/Downloads/{self.symbol.lower()}u"
+            os.system(f"mv /home/mubbashir/Downloads/{self.symbol.lower()}u"
                       f"{end_date_str.split('/')[0][2:4]}*.csv "
-                      f"/home/ubuntu/Barchart-Data-Pipeline/fut_daily_u_data/"
+                      f"/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_u_data/"
                       f"{self.symbol}u_{start_date_str}_{end_date_str}.csv")
         else:
-            os.system(f"mv /home/ubuntu/Downloads/{self.symbol.lower()}z"
+            os.system(f"mv /home/mubbashir/Downloads/{self.symbol.lower()}z"
                       f"{end_date_str.split('/')[0][2:4]}*.csv "
-                      f"/home/ubuntu/Barchart-Data-Pipeline/fut_daily_z_data/"
+                      f"/home/mubbashir/Projects/Barchart-Data-Pipeline/fut_daily_z_data/"
                       f"{self.symbol}z_{start_date_str}_{end_date_str}.csv")
 
         print('***** File Downloaded and moved to folder *****\n\n')
